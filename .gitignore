@@ -35,3 +35,7 @@ build/
 
 ### KDE Plasma ###
 .directory
+
+### Secrets ###
+application.properties
+secrets.properties
