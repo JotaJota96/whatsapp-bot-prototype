@@ -3,6 +3,7 @@ package io.JotaJota96.WhatsAppBotPrototype.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.JotaJota96.WhatsAppBotPrototype.config.SecretProperties;
 import io.JotaJota96.WhatsAppBotPrototype.dto.request.TemplateMsgReqDTO;
+import io.JotaJota96.WhatsAppBotPrototype.dto.request.TextMsgReqDTO;
 import io.JotaJota96.WhatsAppBotPrototype.dto.response.MessageResDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -45,6 +46,43 @@ public class SendingService {
                     .body(String.class);
         } catch (Exception e) {
             System.out.println("Error al enviar el template '" + templateName + "' al número " + phoneNumber + ": " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+        // Convierto lo devuelto por la API de WhatsApp a un DTO
+        try {
+            MessageResDTO result = new ObjectMapper().readValue(resultStr, MessageResDTO.class);
+            String messageID = result.getMessages().get(0).id();
+            String messageStatus = result.getMessages().get(0).message_status();
+            System.out.println("Respuesta de la API de WhatsApp: Status: " + messageStatus + ", ID: " + messageID);
+        } catch (Exception e) {
+            System.out.println("Error al parsear la respuesta de la API de WhatsApp: " + resultStr + "\n" + e.getMessage());
+        }
+    }
+
+    /**
+     * Este método envía un mensaje de texto al número de teléfono especificado.
+     *
+     * @param phoneNumber  Número de teléfono al que se le enviará el template.
+     * @param text         Texto del mensaje.
+     */
+    public void sendTextMessage(String phoneNumber, String text) {
+        String resultStr;
+
+        // Envío la petición a la API de WhatsApp y guardo la respuesta en un String
+        try {
+            System.out.println("Enviando el mensaje '" + text + "' al número " + phoneNumber + "...");
+
+            TextMsgReqDTO message = new TextMsgReqDTO(phoneNumber, text);
+
+            resultStr = this.getRestClient().post()
+                    .uri("")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(message)
+                    .retrieve()
+                    .body(String.class);
+        } catch (Exception e) {
+            System.out.println("Error al enviar el mensaje '" + text + "' al número " + phoneNumber + ": " + e.getMessage());
             throw new RuntimeException(e);
         }
 

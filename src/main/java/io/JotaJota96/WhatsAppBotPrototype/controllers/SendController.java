@@ -30,4 +30,14 @@ public class SendController {
         }
     }
 
+    @GetMapping("/message/{text}/{phoneNumber}")
+    public String sendTextMessage(@PathVariable String text, @PathVariable String phoneNumber) {
+        try {
+            sendingService.sendTextMessage(phoneNumber, text);
+            return "Mensaje '" + text + "' enviada al número " + phoneNumber;
+        } catch (Exception e) {
+            return "Error al enviar plantilla '" + text + "' al número " + phoneNumber + ": " + e.getMessage();
+        }
+    }
+
 }
