@@ -4,7 +4,7 @@ Este proyecto es una prueba para aprender cómo crear un chatbot para WhatsApp u
 
 **Objetivos específicos:**
 
-- [ ] **Enviar Templates:** Enviar mensajes predefinidos utilizando plantillas.
+- [X] **Enviar Templates:** Enviar mensajes predefinidos utilizando plantillas.
 - [ ] **Enviar Mensajes de Texto:** Enviar un mensaje personalizado a un usuario que haya iniciado la conversación previamente.
 - [ ] **Configurar el Webhook:** Establecer una conexión para recibir las notificaciones de eventos y mensajes.
 - [ ] **Recibir Mensajes:** Identificar el tipo de mensaje recibido y acceder a su contenido si es de texto.
