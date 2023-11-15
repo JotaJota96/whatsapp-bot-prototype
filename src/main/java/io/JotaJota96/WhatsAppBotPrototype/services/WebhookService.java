@@ -1,6 +1,10 @@
 package io.JotaJota96.WhatsAppBotPrototype.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.JotaJota96.WhatsAppBotPrototype.config.SecretProperties;
+import io.JotaJota96.WhatsAppBotPrototype.dto.webhook.ValueDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +27,19 @@ public class WebhookService {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Este método convierte el JSON recibido por el webhook de String a un objeto ValueDTO que contiene los datos del evento.
+     *
+     * @param payloadJSON JSON recibido por el webhook
+     * @return Objeto ValueDTO
+     */
+    public ValueDTO getValueDTO(String payloadJSON) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode valueNode = objectMapper.readTree(payloadJSON).at("/entry/0/changes/0/value");
+        ValueDTO valueDTO = objectMapper.treeToValue(valueNode, ValueDTO.class);
+        return valueDTO;
     }
 
 }
